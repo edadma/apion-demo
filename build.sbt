@@ -14,7 +14,7 @@ lazy val apion_demo = project
     scalaVersion := "3.6.2",
     organization := "io.github.edadma",
     libraryDependencies ++= Seq(
-      "io.github.edadma" %%% "apion" % "0.0.2",
+      "io.github.edadma" %%% "apion" % "0.0.2-2",
     ),
 //    libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.6.0",
 //    libraryDependencies += "com.lihaoyi" %%% "pprint" % "0.9.0" % "test",
