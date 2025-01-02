@@ -24,7 +24,8 @@ lazy val apion_demo = project
 //    Test / scalaJSUseMainModuleInitializer := false,
 //    Test / scalaJSUseTestModuleInitializer := true,
     scalaJSUseMainModuleInitializer := true,
-    publishMavenStyle               := true,
-    Test / publishArtifact          := false,
-    licenses += "ISC"               -> url("https://opensource.org/licenses/ISC"),
+    scalaJSLinkerConfig ~= { _.withModuleKind(ModuleKind.CommonJSModule) },
+    publishMavenStyle      := true,
+    Test / publishArtifact := false,
+    licenses += "ISC"      -> url("https://opensource.org/licenses/ISC"),
   )
