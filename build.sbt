@@ -4,28 +4,57 @@ ThisBuild / evictionErrorLevel := Level.Warn
 
 publish / skip := true
 
-lazy val apion_demo = project
-  .in(file("."))
+lazy val commonSettings = Seq(
+  scalacOptions ++= Seq(
+    "-deprecation",
+    "-feature",
+    "-unchecked",
+    "-Xfatal-warnings",
+  ),
+  scalaJSLinkerConfig ~= { _.withModuleKind(ModuleKind.ESModule) },
+  //  scalaJSLinkerConfig ~= { _.withModuleSplitStyle(ModuleSplitStyle.SmallestModules) },
+  scalaJSLinkerConfig ~= { _.withSourceMap(false) },
+)
+
+lazy val client = project
   .enablePlugins(ScalaJSPlugin)
-//  .enablePlugins(ScalablyTypedConverterPlugin)
+  .dependsOn(shared)
+  .settings(commonSettings)
+  //  .enablePlugins(ScalablyTypedConverterPlugin)
   .settings(
-    name         := "apion-demo",
-    version      := "0.0.1",
-    scalaVersion := "3.6.2",
-    organization := "io.github.edadma",
+    name        := "fluxus",
+    description := "A minimalist UI framework inspired by component-based design, built with Scala.js",
     libraryDependencies ++= Seq(
-      "io.github.edadma" %%% "apion" % "0.0.2-2",
+      "org.scalatest"    %%% "scalatest"                   % "3.2.19" % "test",
+      "com.lihaoyi"      %%% "pprint"                      % "0.9.0"  % "test",
+      "org.scala-js"     %%% "scalajs-dom"                 % "2.8.0",
+      "io.github.edadma" %%% "logger"                      % "0.0.6",
+      "dev.zio"          %%% "zio-json"                    % "0.7.3",
+      "com.raquo"        %%% "airstream"                   % "16.0.0",
+      "org.scala-js"     %%% "scala-js-macrotask-executor" % "1.1.1",
     ),
-//    libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.6.0",
-//    libraryDependencies += "com.lihaoyi" %%% "pprint" % "0.9.0" % "test",
     jsEnv                                  := new org.scalajs.jsenv.nodejs.NodeJSEnv(),
+    scalaJSUseMainModuleInitializer        := true,
     Test / scalaJSUseMainModuleInitializer := true,
     Test / scalaJSUseTestModuleInitializer := false,
-//    Test / scalaJSUseMainModuleInitializer := false,
-//    Test / scalaJSUseTestModuleInitializer := true,
-    scalaJSUseMainModuleInitializer := true,
-    scalaJSLinkerConfig ~= { _.withModuleKind(ModuleKind.CommonJSModule) },
-    publishMavenStyle      := true,
-    Test / publishArtifact := false,
-    licenses += "ISC"      -> url("https://opensource.org/licenses/ISC"),
+    //    Test / scalaJSUseMainModuleInitializer := false,
+    //    Test / scalaJSUseTestModuleInitializer := true,
+    Test / parallelExecution := false,
+    publishMavenStyle        := true,
+    Test / publishArtifact   := false,
   )
+
+lazy val server = project
+  .enablePlugins(ScalaJSPlugin)
+  .dependsOn(shared)
+  .settings(commonSettings)
+  .settings(
+    name                            := "examples",
+    scalaJSUseMainModuleInitializer := true,
+    publish / skip                  := true,
+    publishLocal / skip             := true,
+  )
+
+lazy val shared = project
+  .enablePlugins(ScalaJSPlugin)
+  .settings(commonSettings)
